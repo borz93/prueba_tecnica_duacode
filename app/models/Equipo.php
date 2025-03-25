@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace app\models;
 
 use app\core\BaseModel;
+use app\core\Database;
 
 class Equipo extends BaseModel {
     // Table name and fields for BaseModel operations
@@ -32,6 +33,33 @@ class Equipo extends BaseModel {
                 $this->$key = $value;
             }
         }
+    }
+
+    /**
+     * Retrieves all players associated with this team.
+     *
+     * @return Jugador[] Array of Jugador objects.
+     */
+    public function getJugadores(): array {
+        $db = Database::getConnection();
+        $stmt = $db->prepare("SELECT * FROM jugadores WHERE equipo_id = :equipo_id");
+        $stmt->execute([':equipo_id' => $this->id]);
+        $jugadoresData = $stmt->fetchAll(\PDO::FETCH_ASSOC);
+        return array_map(fn($data) => new Jugador($data), $jugadoresData);
+    }
+
+    /**
+     * Returns the team captain if set.
+     *
+     * @return Jugador|null
+     */
+    public function getCapitan(): ?Jugador
+    {
+        $db = Database::getConnection();
+        $stmt = $db->prepare("SELECT * FROM jugadores WHERE equipo_id = :equipo_id AND es_capitan = 1 LIMIT 1");
+        $stmt->execute([':equipo_id' => $this->id]);
+        $data = $stmt->fetch(\PDO::FETCH_ASSOC);
+        return $data ? new Jugador($data) : null;
     }
 
     /**

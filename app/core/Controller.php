@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace app\core;
 
 use JetBrains\PhpStorm\NoReturn;
+use PDOException;
 use RuntimeException;
 
 abstract class Controller {
@@ -39,5 +40,19 @@ abstract class Controller {
     protected function redirect(string $url): void {
         header("Location: " . filter_var($url, FILTER_SANITIZE_URL));
         exit;
+    }
+
+    /**
+     * Handle databases errors.
+     */
+    protected function handleDatabaseError(PDOException $e): string {
+        return "Database error. Please try again later: " . $e->getMessage();
+    }
+
+    /**
+     * Validates ID field.
+     */
+    protected function validateId(mixed $id): ?int {
+        return (isset($id) && is_numeric($id) && $id > 0) ? (int) $id : null;
     }
 }

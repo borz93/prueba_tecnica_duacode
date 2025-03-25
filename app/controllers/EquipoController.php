@@ -65,7 +65,6 @@ class EquipoController extends Controller {
         $this->render('equipos/ver', ['equipo' => $equipo]);
     }
 
-
     public function delete(array $params): void {
         $id = $this->validateId($params['id'] ?? null);
 
@@ -92,7 +91,6 @@ class EquipoController extends Controller {
 
         $this->redirect('/equipos');
     }
-
 
     private function initializeFormData(): array {
         return [
@@ -135,16 +133,6 @@ class EquipoController extends Controller {
         }
 
         return $errors;
-    }
-
-    private function validateId(mixed $id): ?int {
-        return (isset($id) && is_numeric($id) && $id > 0) ? (int) $id : null;
-    }
-
-    private function handleDatabaseError(PDOException $e): string {
-        return $e->getCode() === '23000'
-            ? "A team with this name already exists."
-            : "Database error. Please try again later.";
     }
 
 }
