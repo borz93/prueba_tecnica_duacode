@@ -37,6 +37,21 @@ abstract class BaseModel {
     }
 
     /**
+     * Sets the model attributes from an associative array.
+     *
+     * @param array $data
+     * @return void
+     */
+    public function setAttributes(array $data): void {
+        foreach ($data as $key => $value) {
+            if (property_exists($this, $key)) {
+                $this->$key = $value;
+            }
+            $this->atributos[$key] = $value;
+        }
+    }
+
+    /**
      * Inserts a new record into the database.
      *
      * @return bool True on success, false on failure.
@@ -50,7 +65,13 @@ abstract class BaseModel {
         $stmt = $db->prepare($sql);
 
         foreach (static::$campos as $campo) {
-            $stmt->bindValue(":$campo", $this->atributos[$campo] ?? null);
+            $value = $this->atributos[$campo] ?? null;
+
+            if (is_bool($value)) {
+                $stmt->bindValue(":$campo", $value, PDO::PARAM_BOOL);
+            } else {
+                $stmt->bindValue(":$campo", $value);
+            }
         }
 
         $success = $stmt->execute();
@@ -77,7 +98,13 @@ abstract class BaseModel {
 
         $stmt = $db->prepare($sql);
         foreach (static::$campos as $campo) {
-            $stmt->bindValue(":$campo", $this->atributos[$campo] ?? null);
+            $value = $this->atributos[$campo] ?? null;
+
+            if (is_bool($value)) {
+                $stmt->bindValue(":$campo", $value, PDO::PARAM_BOOL);
+            } else {
+                $stmt->bindValue(":$campo", $value);
+            }
         }
         $stmt->bindValue(':id', $this->atributos['id'], PDO::PARAM_INT);
 

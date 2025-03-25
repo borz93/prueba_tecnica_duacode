@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Crear nuevo Equipo</title>
+    <title><?= isset($data['id']) ? 'Editar Jugador' : 'Crear nuevo Jugador' ?></title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
     <style>
@@ -20,8 +20,12 @@
             <div class="card shadow-sm">
                 <div class="card-header bg-primary text-white">
                     <div class="d-flex justify-content-between align-items-center">
-                        <h2 class="h5 mb-0"><i class="bi bi-plus-circle me-2"></i>Crear nuevo equipo</h2>
-                        <a href="/equipos" class="btn btn-sm btn-light">
+                        <h2 class="h5 mb-0">
+                            <i class="bi bi-<?= isset($data['id']) ? 'pencil' : 'plus-circle' ?> me-2"></i>
+                            <?= isset($data['id']) ? 'Editar Jugador' : 'Crear Nuevo Jugador' ?>
+                        </h2>
+                        <a href="/equipos/ver/<?= htmlspecialchars((string)($data['equipo_id'] ?? 0)) ?>"
+                           class="btn btn-sm btn-light">
                             <i class="bi bi-arrow-left"></i> Volver
                         </a>
                     </div>
@@ -39,60 +43,62 @@
                         </div>
                     <?php endif; ?>
 
-                    <form method="POST" action="/equipos/crear" class="needs-validation" novalidate>
+                    <form method="POST" action="" class="needs-validation" novalidate>
+                        <?php if (isset($data['id'])): ?>
+                            <input type="hidden" name="id" value="<?= htmlspecialchars((string)($data['id'])) ?>">
+                        <?php endif; ?>
+                        <input type="hidden" name="equipo_id"
+                               value="<?= htmlspecialchars((string)($data['equipo_id'] ?? 0)) ?>">
+
                         <div class="row g-3">
-                            <!-- Campo: Nombre -->
                             <div class="col-md-6">
-                                <label for="nombre" class="form-label required-label">Nombre del equipo</label>
-                                <input type="text" class="form-control <?= isset($errors['nombre']) ? 'is-invalid' : '' ?>"
-                                       id="nombre" name="nombre" value="<?= htmlspecialchars($datos['nombre'] ?? '') ?>"
-                                       required pattern=".{3,50}" title="Mínimo 3 caracteres">
+                                <label for="nombre" class="form-label required-label">Nombre del jugador</label>
+                                <input type="text"
+                                       class="form-control <?= isset($errors['nombre']) ? 'is-invalid' : '' ?>"
+                                       id="nombre" name="nombre" value="<?= htmlspecialchars($data['nombre'] ?? '') ?>"
+                                       required pattern=".{3,100}" title="Mínimo 3 caracteres">
                                 <div class="invalid-feedback">
-                                    Por favor ingrese un nombre válido (3-50 caracteres).
+                                    Por favor ingrese un nombre válido (3-100 caracteres).
                                 </div>
                             </div>
 
-                            <!-- Campo: Deporte -->
                             <div class="col-md-6">
-                                <label for="deporte" class="form-label required-label">Deporte</label>
-                                <select class="form-select <?= isset($errors['deporte']) ? 'is-invalid' : '' ?>"
-                                        id="deporte" name="deporte" required>
-                                    <option value="" disabled selected>Seleccione un deporte...</option>
-                                    <option value="Fútbol" <?= ($data['deporte'] ?? '') === 'Fútbol' ? 'selected' : '' ?>>Fútbol</option>
-                                    <option value="Baloncesto" <?= ($data['deporte'] ?? '') === 'Baloncesto' ? 'selected' : '' ?>>Baloncesto</option>
-                                    <option value="Tenis" <?= ($data['deporte'] ?? '') === 'Tenis' ? 'selected' : '' ?>>Tenis</option>
-                                </select>
+                                <label for="numero" class="form-label required-label">Número</label>
+                                <input type="number"
+                                       class="form-control <?= isset($errors['numero']) ? 'is-invalid' : '' ?>"
+                                       id="numero" name="numero" min="1" max="99"
+                                       value="<?= htmlspecialchars((string)($data['numero'] ?? '')) ?>" required>
                                 <div class="invalid-feedback">
-                                    Seleccione un deporte válido.
+                                    Ingrese un número entre 1 y 99.
                                 </div>
                             </div>
 
-                            <!-- Campo: Ciudad -->
                             <div class="col-md-6">
-                                <label for="ciudad" class="form-label">Ciudad</label>
-                                <input type="text" class="form-control" id="ciudad" name="ciudad"
-                                       value="<?= htmlspecialchars($data['ciudad'] ?? '') ?>"
-                                       required pattern=".{3,50}" title="Mínimo 3 caracteres">
-                                <div class="invalid-feedback">
-                                    Por favor ingrese un nombre válido (3-50 caracteres).
+                                <div class="form-check mt-4">
+                                    <input type="checkbox"
+                                           class="form-check-input"
+                                           id="es_capitan"
+                                           name="es_capitan"
+                                           value="1"
+                                        <?= ($data['es_capitan'] ?? false) ? 'checked' : '' ?>>
+
+                                    <label for="es_capitan" class="form-check-label">
+                                        ¿Es Capitán?
+                                        <?php if ($data['capitan_existente'] ?? false): ?>
+                                            <small class="text-danger">(¡Ya hay un capitán asignado!)</small>
+                                        <?php endif; ?>
+                                    </label>
                                 </div>
                             </div>
 
-                            <!-- Campo: Fecha Fundación -->
-                            <div class="col-md-6">
-                                <label for="fundacion" class="form-label">Fecha de Fundación</label>
-                                <input type="date" class="form-control" id="fundacion" name="fundacion"
-                                       max="<?= date('Y-m-d') ?>" value="<?= htmlspecialchars($data['fundacion'] ?? '') ?>">
-                            </div>
-
-                            <!-- Botones -->
                             <div class="col-12 mt-4">
                                 <div class="d-flex justify-content-end gap-2">
                                     <button type="reset" class="btn btn-outline-secondary">
                                         <i class="bi bi-eraser"></i> Limpiar
                                     </button>
                                     <button type="submit" class="btn btn-primary">
-                                        <i class="bi bi-save"></i> Guardar Equipo
+                                        <i class="bi bi-save"></i> <?= isset($data['id']) ? 'Actualizar' : 'Guardar' ?>
+                                        Jugador
                                     </button>
                                 </div>
                             </div>
@@ -106,11 +112,9 @@
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script>
-    // Validación del lado del cliente
     (() => {
         'use strict'
         const forms = document.querySelectorAll('.needs-validation')
-
         Array.from(forms).forEach(form => {
             form.addEventListener('submit', event => {
                 if (!form.checkValidity()) {
