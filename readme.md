@@ -41,7 +41,8 @@ Este proyecto es una aplicación web para gestionar equipos y sus jugadores, per
 - **`readme.md`**
 - **`.htaccess`**
 - **`sql/`** → Directorio SQL
-  - **`schema.sql`** → Script SQL para crear la base de datos
+  - **`schema.sql`** → Script SQL para crear la base de datos  
+- **`screenshots/`** → Imágenes de la aplicación
 
 ## **⚙️ Instalación y Configuración**
 
