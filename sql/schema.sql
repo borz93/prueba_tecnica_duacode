@@ -7,8 +7,8 @@ CREATE TABLE IF NOT EXISTS equipos (
     id INT PRIMARY KEY AUTO_INCREMENT,
     nombre VARCHAR(100),
     ciudad VARCHAR(50),
-    deporte ENUM('Fútbol', 'Baloncesto', 'Tenis') NOT NULL, -- Campo desplegable
-    fundacion DATE, -- Campo fecha
+    deporte ENUM('Fútbol', 'Baloncesto', 'Tenis') NOT NULL,
+    fundacion DATE,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
     );
 
@@ -20,7 +20,9 @@ CREATE TABLE IF NOT EXISTS jugadores (
      equipo_id INT NOT NULL,
      es_capitan BOOLEAN DEFAULT FALSE,
      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-     FOREIGN KEY (equipo_id) REFERENCES equipos(id) ON DELETE CASCADE
+     capitan_unico INT GENERATED ALWAYS AS (IF(es_capitan = 1, equipo_id, NULL)) VIRTUAL,
+     FOREIGN KEY (equipo_id) REFERENCES equipos(id) ON DELETE CASCADE,
+     UNIQUE INDEX idx_capitan_unico (capitan_unico)
 );
 
 -- Usuario con permisos (No docker)
