@@ -8,6 +8,17 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
 </head>
 <body class="bg-light">
+<?php
+if (session_status() !== PHP_SESSION_ACTIVE) session_start();
+if (isset($_SESSION['message'])): ?>
+    <div class="alert alert-<?= $_SESSION['message_type'] ?> alert-dismissible fade show m-3" role="alert">
+        <?= $_SESSION['message'] ?>
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+    <?php
+    unset($_SESSION['message']);
+    unset($_SESSION['message_type']);
+endif; ?>
 <div class="container mt-4">
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h1 class="mb-0">Listado de Equipos</h1>
@@ -15,15 +26,6 @@
             <i class="bi bi-plus-circle"></i> Nuevo Equipo
         </a>
     </div>
-
-    <?php if (isset($_SESSION['mensaje'])): ?>
-        <div class="alert alert-<?= $_SESSION['mensaje_tipo'] ?> alert-dismissible fade show">
-            <?= htmlspecialchars($_SESSION['mensaje']) ?>
-            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-        </div>
-        <?php unset($_SESSION['mensaje']); ?>
-    <?php endif; ?>
-
     <div class="card shadow">
         <div class="card-body p-0">
             <div class="table-responsive">

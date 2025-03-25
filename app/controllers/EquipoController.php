@@ -34,7 +34,7 @@ class EquipoController extends Controller {
                     $errors['general'] = $this->handleDatabaseError($e);
                 } catch (Exception $e) {
                     error_log("Unexpected error: " . $e->getMessage());
-                    $errors['general'] = "Unexpected error. Please contact the administrator.";
+                    $errors['general'] = "Unexpected error";
                 }
             }
         }
@@ -49,7 +49,7 @@ class EquipoController extends Controller {
         $id = $this->validateId($params['id'] ?? null);
 
         if (!$id) {
-            $this->setFlashMessage("Invalid request: Missing or incorrect ID.", "danger");
+            $this->setFlashMessage("Invalid request: ID incorrecto.", "danger");
             $this->redirect('/equipos');
             return;
         }
@@ -57,7 +57,7 @@ class EquipoController extends Controller {
         $equipo = Equipo::find($id);
 
         if (!$equipo) {
-            $this->setFlashMessage("The team does not exist.", "warning");
+            $this->setFlashMessage("El equipo no existe.", "warning");
             $this->redirect('/equipos');
             return;
         }
@@ -69,7 +69,7 @@ class EquipoController extends Controller {
         $id = $this->validateId($params['id'] ?? null);
 
         if (!$id) {
-            $this->setFlashMessage("Invalid request: Missing or incorrect ID.", "danger");
+            $this->setFlashMessage("Invalid request: ID incorrecto.", "danger");
             $this->redirect('/equipos');
             return;
         }
@@ -78,11 +78,11 @@ class EquipoController extends Controller {
             $equipo = Equipo::find($id);
 
             if (!$equipo) {
-                $this->setFlashMessage("The team does not exist.", "warning");
+                $this->setFlashMessage("El equipo no existe.", "warning");
             } elseif ($equipo->delete()) {
-                $this->setFlashMessage("Team successfully deleted.", "success");
+                $this->setFlashMessage("Equipo eliminado exitosamente.", "success");
             } else {
-                $this->setFlashMessage("An error occurred while deleting the team.", "danger");
+                $this->setFlashMessage("Error mientras eliminación de equipo.", "danger");
             }
         } catch (PDOException $e) {
             error_log("Error deleting team: " . $e->getMessage());
@@ -115,13 +115,13 @@ class EquipoController extends Controller {
 
         // Validate 'nombre' field
         if (empty($data['nombre']) || strlen($data['nombre']) < 3) {
-            $errors['nombre'] = "The name must be at least 3 characters long.";
+            $errors['nombre'] = "El nombre debe tener 3 caracteres.";
         }
 
         // Validate 'deporte' field
         $validSports = ['Fútbol', 'Baloncesto', 'Tenis'];
         if (!in_array($data['deporte'], $validSports, true)) {
-            $errors['deporte'] = "Please select a valid sport.";
+            $errors['deporte'] = "Selecciona un deporte.";
         }
 
         // Validate 'fundacion' field

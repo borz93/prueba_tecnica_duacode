@@ -4,10 +4,8 @@ declare(strict_types=1);
 namespace app\models;
 
 use app\core\BaseModel;
-use app\core\Database;
 
 class Equipo extends BaseModel {
-    // Table name and fields for BaseModel operations
     protected static string $tabla = 'equipos';
     protected static array $campos = ['nombre', 'ciudad', 'deporte', 'fundacion'];
 
@@ -41,7 +39,7 @@ class Equipo extends BaseModel {
      * @return Jugador[] Array of Jugador objects.
      */
     public function getJugadores(): array {
-        $db = Database::getConnection();
+        $db = self::getDB();
         $stmt = $db->prepare("SELECT * FROM jugadores WHERE equipo_id = :equipo_id");
         $stmt->execute([':equipo_id' => $this->id]);
         $jugadoresData = $stmt->fetchAll(\PDO::FETCH_ASSOC);
@@ -55,7 +53,7 @@ class Equipo extends BaseModel {
      */
     public function getCapitan(): ?Jugador
     {
-        $db = Database::getConnection();
+        $db = self::getDB();
         $stmt = $db->prepare("SELECT * FROM jugadores WHERE equipo_id = :equipo_id AND es_capitan = 1 LIMIT 1");
         $stmt->execute([':equipo_id' => $this->id]);
         $data = $stmt->fetch(\PDO::FETCH_ASSOC);
@@ -63,7 +61,7 @@ class Equipo extends BaseModel {
     }
 
     /**
-     * Magic method to provide a string representation of the Equipo object.
+     * Magic method to provide a string representation of the Equipo object (debug).
      *
      * @return string
      */
@@ -76,4 +74,5 @@ class Equipo extends BaseModel {
             $this->fundacion ?? 'N/A'
         );
     }
+
 }

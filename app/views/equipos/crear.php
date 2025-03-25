@@ -14,6 +14,17 @@
     </style>
 </head>
 <body class="bg-light">
+<?php
+if (session_status() !== PHP_SESSION_ACTIVE) session_start();
+if (isset($_SESSION['message'])): ?>
+    <div class="alert alert-<?= $_SESSION['message_type'] ?> alert-dismissible fade show m-3" role="alert">
+        <?= $_SESSION['message'] ?>
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+    <?php
+    unset($_SESSION['message']);
+    unset($_SESSION['message_type']);
+endif; ?>
 <div class="container py-5">
     <div class="row justify-content-center">
         <div class="col-lg-8">
@@ -81,11 +92,10 @@
                             <!-- Campo: Fecha Fundación -->
                             <div class="col-md-6">
                                 <label for="fundacion" class="form-label">Fecha de Fundación</label>
-                                <input type="date" class="form-control" id="fundacion" name="fundacion"
+                                <input type="date" class="form-control" id="fundacion" name="fundacion" required
                                        max="<?= date('Y-m-d') ?>" value="<?= htmlspecialchars($data['fundacion'] ?? '') ?>">
                             </div>
 
-                            <!-- Botones -->
                             <div class="col-12 mt-4">
                                 <div class="d-flex justify-content-end gap-2">
                                     <button type="reset" class="btn btn-outline-secondary">
@@ -106,7 +116,6 @@
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script>
-    // Validación del lado del cliente
     (() => {
         'use strict'
         const forms = document.querySelectorAll('.needs-validation')

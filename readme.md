@@ -60,6 +60,11 @@ Ejecutar el script `schema.sql`, y asignar usuario y password en `Database.php`
 
 Si se usa docker, se ejecuta automaticamente.
 
+### **4️⃣ .htcacces**
+Si no se usa Docker, asegurarse que el entorno disponde de habilitar mod_rewrite y configurar AllowOverride.
+
+Ver `Dockerfile` para mas información.
+
 ## **🛠️ Uso del Proyecto**
 
 ### **Rutas Disponibles**

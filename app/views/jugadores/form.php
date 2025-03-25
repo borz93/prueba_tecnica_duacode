@@ -83,7 +83,7 @@
                                         <?= ($data['es_capitan'] ?? false) ? 'checked' : '' ?>>
 
                                     <label for="es_capitan" class="form-check-label">
-                                        ¿Es Capitán?
+                                        Capitán
                                         <?php if ($data['capitan_existente'] ?? false): ?>
                                             <small class="text-danger">(¡Ya hay un capitán asignado!)</small>
                                         <?php endif; ?>
