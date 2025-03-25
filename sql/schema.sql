@@ -14,15 +14,14 @@ CREATE TABLE IF NOT EXISTS equipos (
 
 -- Tabla 'jugadores' (Ejercicio 2)
 CREATE TABLE IF NOT EXISTS jugadores (
-    id INT PRIMARY KEY AUTO_INCREMENT,
-    nombre VARCHAR(100) NOT NULL,
-    numero INT,
-    equipo_id INT NOT NULL,
-    es_capitan BOOLEAN DEFAULT FALSE,
-    FOREIGN KEY (equipo_id)
-    REFERENCES equipos(id)
-    ON DELETE CASCADE
-    );
+     id INT PRIMARY KEY AUTO_INCREMENT,
+     nombre VARCHAR(100) NOT NULL,
+     numero INT CHECK (numero BETWEEN 1 AND 99),
+     equipo_id INT NOT NULL,
+     es_capitan BOOLEAN DEFAULT FALSE,
+     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+     FOREIGN KEY (equipo_id) REFERENCES equipos(id) ON DELETE CASCADE
+);
 
 -- Usuario con permisos (No docker)
 CREATE USER IF NOT EXISTS 'app_user'@'%' IDENTIFIED BY 'password';
