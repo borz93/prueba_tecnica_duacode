@@ -69,8 +69,10 @@ Ver `Dockerfile` para mas información.
 
 ### **Rutas Disponibles**
 
+Acceder a `http://localhost:8080` (depende del entorno usado)
+
 #### **Equipos**
-- `GET /equipos` → Listado de equipos
+- `GET /equipos` → Listado de equipos (url por defecto)
 - `GET /equipos/crear` → Formulario de creación
 - `POST /equipos/crear` → Procesar nuevo equipo
 - `GET /equipos/ver/{id}` → Ver detalles de un equipo
